@@ -25,4 +25,9 @@ public class ThanaService {
     public List<Thana> getThanaByDistrictId(int id) {
         return thanaRepository.findByDistricts_Id(id);
     }
+
+
+    public List<Thana> findThanabyPoly(double latitude, double longitude) {
+        return thanaRepository.findByPolyxandPoly(latitude, longitude);
+    }
 }

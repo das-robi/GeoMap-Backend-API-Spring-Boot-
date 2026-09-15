@@ -9,5 +9,4 @@ public class GeoMapBackendApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GeoMapBackendApiApplication.class, args);
 	}
-
 }

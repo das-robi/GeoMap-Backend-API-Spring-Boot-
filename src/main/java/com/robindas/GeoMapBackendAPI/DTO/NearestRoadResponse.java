@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoadResponse {
+public class NearestRoadResponse {
 
     private int id;
-    private String road;
+    private String description;
     private double lat;
     private double lon;
     private double distance;

@@ -2,30 +2,24 @@ package com.robindas.GeoMapBackendAPI.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.locationtech.jts.geom.LineString;
 
 @Data
 @Entity
-@Table(name = "ROAD", schema = "M2MDEV")
+@Table(name = "spatial_road", schema = "m2mdev")
 public class Road {
 
     @Id
-    private int id;
+    private long id;
+    private String description;;
 
-    @ManyToOne
-    @JoinColumn(name = "dist_id")
-    private Districts districts;
+    @Column(name = "dist_id")
+    private Long districts;
 
-    @ManyToOne
-    @JoinColumn(name = "thana_id")
-    private Thana thana;
+    @Column(name = "thana_id")
+    private Long thanaId;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    @Column(columnDefinition = "TEXT")
-    private String polyx;
-
-    @Column(columnDefinition = "TEXT")
-    private String polyy;
+    @Column(columnDefinition = "geometry(LineString, 4326)")
+    private LineString geom;
 
 }

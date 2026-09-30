@@ -2,26 +2,20 @@ package com.robindas.GeoMapBackendAPI.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.locationtech.jts.geom.Polygon;
 
 @Data
 @Entity
-@Table(name = "THANA", schema = "M2MDEV")
+@Table(name = "spatial_thana", schema = "m2mdev")
 public class Thana {
 
     @Id
-    private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "dist_id")
-    private Districts districts;
-
-    @Column(columnDefinition = "TEXT")
+    private long id;
     private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String polyx;
+    @Column(name = "dist_id")
+    private Long distId;
 
-    @Column(columnDefinition = "TEXT")
-    private String polyy;
-
+    @Column(columnDefinition = "geometry(Polygon, 4326)")
+    private Polygon geom;
 }

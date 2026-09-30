@@ -1,5 +1,6 @@
 package com.robindas.GeoMapBackendAPI.Configure;
 
+import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonSpatialConfig {
 
     @Bean
-    
+    public JtsModule jtsModule(){
+        return new JtsModule();
+    }
 
 }

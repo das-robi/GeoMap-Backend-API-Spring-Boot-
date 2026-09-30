@@ -1,24 +1,21 @@
 package com.robindas.GeoMapBackendAPI.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.locationtech.jts.geom.Polygon;
+
 
 @Data
 @Entity
-@Table(name = "DISTRICT", schema = "M2MDEV")
+@Table(name = "spatial_district", schema = "m2mdev")
 public class Districts {
 
     @Id
-    private int Id;
-
-    @Column(columnDefinition = "TEXT")
+    private long Id;
     private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String polyx;
-
-    @Column(columnDefinition = "TEXT")
-    private String polyy;
-
-
+    @JsonIgnore
+    @Column(columnDefinition = "geometry(Polygon, 4326)")
+    private Polygon geom;
 }

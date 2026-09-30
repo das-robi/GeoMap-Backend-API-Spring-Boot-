@@ -2,36 +2,25 @@ package com.robindas.GeoMapBackendAPI.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.locationtech.jts.geom.Point;
+
 
 @Data
 @Entity
-@Table(name = "POI", schema = "M2MDEV")
+@Table(name = "spatial_poi", schema = "m2mdev")
 public class POIS {
 
     @Id
-    private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "dist_id")
-    private Districts districts;
-
-    @ManyToOne
-    @JoinColumn(name = "thana_id")
-    private Thana thana;
-//
-//    @Column(name = "dist_id")
-//    private Integer distId;
-//
-//    @Column(name = "thana_id")
-//    private Integer thanaId;
-
-    @Column(columnDefinition = "TEXT")
+    private long id;
     private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String x = "";
+    @Column(name = "dist_id")
+    private Long distId;
 
-    @Column(columnDefinition = "TEXT")
-    private String y;
+    @Column(name = "thana_id")
+    private Long thanaId;
+
+    @Column(columnDefinition = "geometry(Point, 4326)")
+    private Point geom;
 
 }

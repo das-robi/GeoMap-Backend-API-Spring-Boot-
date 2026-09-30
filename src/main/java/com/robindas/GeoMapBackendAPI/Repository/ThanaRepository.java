@@ -12,5 +12,5 @@ public interface ThanaRepository extends JpaRepository<Thana, Integer> {
 
     List<Thana> findByDistricts_Id(int id);
 
-    List<Thana> findByPolyxandPoly(double latitude, double longitude);
+//    List<Thana> findByPolyxAndPoly(double latitude, double longitude);
 }

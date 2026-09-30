@@ -1,16 +1,16 @@
 package com.robindas.GeoMapBackendAPI.Service;
 
-import com.robindas.GeoMapBackendAPI.DTO.NearestPlaceResponse;
-import com.robindas.GeoMapBackendAPI.DTO.NearestRoadResponse;
+import com.robindas.GeoMapBackendAPI.DTO.*;
 import com.robindas.GeoMapBackendAPI.Models.*;
 import com.robindas.GeoMapBackendAPI.Repository.DistrictRepository;
 import com.robindas.GeoMapBackendAPI.Repository.LocationRepository;
 import com.robindas.GeoMapBackendAPI.Repository.RoadRepository;
 import com.robindas.GeoMapBackendAPI.Repository.ThanaRepository;
-import com.robindas.GeoMapBackendAPI.Util.DistanceCalculation;
-import com.robindas.GeoMapBackendAPI.Util.GeometryParser;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,8 +54,8 @@ public class LocationService {
 
             response.setId(poi.getId());
             response.setName(poi.getDescription());
-            response.setLatitude(Double.parseDouble(poi.getX()));
-            response.setLongitude(Double.parseDouble(poi.getY()));
+//            response.setLatitude(Double.parseDouble(poi.getX()));
+//            response.setLongitude(Double.parseDouble(poi.getY()));
             response.setDistance(distance);
 
             nearestPoi.add(response);
@@ -86,8 +86,8 @@ public class LocationService {
 
                 response.setId(road.getId());
                 response.setDescription(road.getDescription());
-                response.setLat(points.getLatitude());
-                response.setLon(points.getLongitude());
+//                response.setLat(points.getLatitude());
+//                response.setLon(points.getLongitude());
                 response.setDistance(distance);
 
 //                System.out.println("Road Id " + road.getId());
@@ -106,81 +106,203 @@ public class LocationService {
     }
 
 
-    public List<NearestRoadResponse> findNearestThana(double latitude, double longitude) {
+//    public List<NearestRoadResponse> findThanaByLocation(double latitude, double longitude) {
+//
+//        List<Thana> allThana = thanaRepository.findAll();
+//
+//        List<NearestRoadResponse> nearestThana = new ArrayList<>();
+//
+//        GeoPoints userDistance = new GeoPoints(latitude, longitude);
+//
+//
+//        for (Thana thana : allThana){
+//
+//            List<GeoPoints> locationPoints = GeometryParser.parser(thana.getPolyx(), thana.getPolyy());
+//
+////            System.out.println("Locations Points: " + locationPoints);
+//
+//            for (GeoPoints points : locationPoints){
+//
+//                double distance = DistanceCalculation.calculateDistance(userDistance, points);
+//
+//                NearestRoadResponse response = new NearestRoadResponse();
+//
+//                                System.out.println("Road Id " + thana.getId());
+//                System.out.println("Thana Name " + thana.getDescription());
+//                System.out.println("Lat " + thana.getPolyx());
+//                System.out.println("Lon " + thana.getPolyy());
+//                System.out.println("District " + thana.getDistricts());
+//
+//                response.setId(thana.getId());
+//                response.setDescription(thana.getDescription());
+//                response.setDistance(distance);
+////                response.setLat(points.getLatitude());
+////                response.setLon(points.getLongitude());
+//
+//                nearestThana.add(response);
+//            }
+//        }
+//
+//
+//        nearestThana.sort(Comparator.comparing(NearestRoadResponse::getDistance));
+//
+//        return nearestThana.subList(0, Math.min(5, nearestThana.size()));
+//    }
 
-        List<Thana> allThana = thanaRepository.findAll();
+//    public DistrictResponse findDistrictsByLocation(double latitude, double longitude) {
+//
+//        List<Districts> allDistricts = districtRepository.findAll();
+//
+//        List<NearestRoadResponse> nearestDistricts = new ArrayList<>();
+//
+//        GeoPoints userDistance = new GeoPoints(latitude, longitude);
+//
+//        for (Districts districts : allDistricts){
+//
+//            List<GeoPoints> locationPoints = GeometryParser.parser(districts.getPolyx(), districts.getPolyy());
+//
+//            for (GeoPoints points : locationPoints){
+//
+//                double distance = DistanceCalculation.calculateDistance(userDistance, points);
+//
+//                NearestRoadResponse response = new NearestRoadResponse();
+//
+//                response.setId(districts.getId());
+//                response.setDescription(districts.getDescription());
+////                response.setLat(points.getLatitude());
+////                response.setLon(points.getLongitude());
+//                response.setDistance(distance);
+//
+//                nearestDistricts.add(response);
+//            }
+//
+//        }
+//
+//        nearestDistricts.sort(Comparator.comparing(NearestRoadResponse::getDistance));
+//
+//        return nearestDistricts.subList(0, Math.min(5, nearestDistricts.size()));
+//    }
 
-        List<NearestRoadResponse> nearestThana = new ArrayList<>();
 
-        GeoPoints userDistance = new GeoPoints(latitude, longitude);
+//public ThanaResponse findThanaByLocation(double latitude, double longitude) {
+//
+//    List<Thana> allDistricts = thanaRepository.findAll();
+//
+//    GeometryFactory geometryFactory = new GeometryFactory();
+//
+//    // JTS uses:
+//    // X = longitude
+//    // Y = latitude
+//    Point userPoint = geometryFactory.createPoint(
+//            new Coordinate(longitude, latitude)
+//    );
+//
+//    for (Thana district : allDistricts) {
+//
+//        List<GeoPoints> locationPoints =
+//                GeometryParser.parser(
+//                        district.getPolyx(),
+//                        district.getPolyy()
+//                );
+//
+//        if (locationPoints.size() < 4) {
+//            continue;
+//        }
+//
+//        Coordinate[] coordinates = new Coordinate[locationPoints.size()];
+//
+//        for (int i = 0; i < locationPoints.size(); i++) {
+//
+//            GeoPoints point = locationPoints.get(i);
+//
+//            coordinates[i] = new Coordinate(
+//                    point.getLongitude(),
+//                    point.getLatitude()
+//            );
+//        }
+//
+//        Polygon polygon = geometryFactory.createPolygon(coordinates);
+//
+//        if (polygon.covers(userPoint)) {
+//
+//            DistrictResponse response = new DistrictResponse();
+//
+//            response.setId(district.getId());
+//            response.setDistrictName(district.getDescription());
+//
+//            return response;
+//        }
+//    }
+//
+//    return null;
+//}
 
 
-        for (Thana thana : allThana){
+public DistrictResponse findDistrictByLocation(double latitude, double longitude) {
 
-            List<GeoPoints> locationPoints = GeometryParser.parser(thana.getPolyx(), thana.getPolyy());
+    List<Districts> allDistricts = districtRepository.findAll();
 
-//            System.out.println("Locations Points: " + locationPoints);
+    GeometryFactory geometryFactory = new GeometryFactory();
 
-            for (GeoPoints points : locationPoints){
+    // JTS uses:
+    // X = longitude
+    // Y = latitude
+    Point userPoint = geometryFactory.createPoint(
+            new Coordinate(longitude, latitude)
+    );
 
-                double distance = DistanceCalculation.calculateDistance(userDistance, points);
+    for (Districts district : allDistricts) {
 
-                NearestRoadResponse response = new NearestRoadResponse();
+        List<GeoPoints> locationPoints =
+                GeometryParser.parser(
+                        district.getPolyx(),
+                        district.getPolyy()
+                );
 
-                                System.out.println("Road Id " + thana.getId());
-                System.out.println("Thana Name " + thana.getDescription());
-                System.out.println("Lat " + thana.getPolyx());
-                System.out.println("Lon " + thana.getPolyy());
-                System.out.println("District " + thana.getDistricts());
-
-                response.setId(thana.getId());
-                response.setDescription(thana.getDescription());
-                response.setDistance(distance);
-                response.setLat(points.getLatitude());
-                response.setLon(points.getLongitude());
-
-                nearestThana.add(response);
-            }
+        if (locationPoints.size() < 4) {
+            continue;
         }
 
+        Coordinate[] coordinates = new Coordinate[locationPoints.size()];
 
-        nearestThana.sort(Comparator.comparing(NearestRoadResponse::getDistance));
+        for (int i = 0; i < locationPoints.size(); i++) {
 
-        return nearestThana.subList(0, Math.min(5, nearestThana.size()));
-    }
+            GeoPoints point = locationPoints.get(i);
 
-    public List<NearestRoadResponse> findNearestDistricts(double latitude, double longitude) {
-
-        List<Districts> allDistricts = districtRepository.findAll();
-
-        List<NearestRoadResponse> nearestDistricts = new ArrayList<>();
-
-        GeoPoints userDistance = new GeoPoints(latitude, longitude);
-
-        for (Districts districts : allDistricts){
-
-            List<GeoPoints> locationPoints = GeometryParser.parser(districts.getPolyx(), districts.getPolyy());
-
-            for (GeoPoints points : locationPoints){
-
-                double distance = DistanceCalculation.calculateDistance(userDistance, points);
-
-                NearestRoadResponse response = new NearestRoadResponse();
-
-                response.setId(districts.getId());
-                response.setDescription(districts.getDescription());
-                response.setLat(points.getLatitude());
-                response.setLon(points.getLongitude());
-                response.setDistance(distance);
-
-                nearestDistricts.add(response);
-            }
-
+            coordinates[i] = new Coordinate(
+                    point.getLongitude(),
+                    point.getLatitude()
+            );
         }
 
-        nearestDistricts.sort(Comparator.comparing(NearestRoadResponse::getDistance));
+        Polygon polygon = geometryFactory.createPolygon(coordinates);
 
-        return nearestDistricts.subList(0, Math.min(5, nearestDistricts.size()));
+        if (polygon.covers(userPoint)) {
+
+            DistrictResponse response = new DistrictResponse();
+
+            response.setId(district.getId());
+            response.setDistrictName(district.getDescription());
+
+            return response;
+        }
     }
+
+    return null;
+}
+
+//    public NearByLocationResponse nearByLocationResponse(double latitude, double longitude){
+//
+//        NearByLocationResponse response = new NearByLocationResponse();
+//
+//        response.setLatitude(latitude);
+//        response.setLongitude(longitude);
+//
+//
+//        response.setDistrict(
+//                findDistrictsByLocation(latitude, longitude)
+//        );
+//
+//    }
 
 }
